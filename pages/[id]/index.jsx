@@ -62,6 +62,18 @@ export async function getServerSideProps({ params }) {
   try {
     await dbConnect();
 
+    if (params.id === "sw.js") {
+      return {
+        props: {
+          success: true,
+          movie: {
+            title: "default",
+            plot: "default",
+          },
+        },
+      };
+    }
+
     const movie = await Movie.findById(params.id).lean();
 
     if (!movie) {
