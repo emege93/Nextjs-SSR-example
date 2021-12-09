@@ -20,7 +20,34 @@ const Form = ({ formData, forNewMovie = true }) => {
     if (forNewMovie) {
       postData(form);
     } else {
-      // editar data
+      putData(form);
+    }
+  };
+
+  const putData = async (form) => {
+    const { id } = router.query;
+
+    try {
+      console.log(form);
+
+      const res = await fetch(`/api/movie/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      if (!res.ok) {
+        throw new Error(res.status);
+      }
+
+      router.push("/");
+    } catch (error) {
+      setMessage("Failed to edit Movie");
     }
   };
 
@@ -70,7 +97,7 @@ const Form = ({ formData, forNewMovie = true }) => {
         onChange={handleOnChange}
       />
       <button className="btn btn-primary w-100" type="submit">
-        Add
+        {forNewMovie ? " Add" : " Edit"}
       </button>
       <Link href="/">
         <a className="btn btn-warning w-100 my-2">Back</a>
